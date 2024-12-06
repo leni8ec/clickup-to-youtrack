@@ -1,26 +1,35 @@
 from dataclasses import dataclass
-from typing import Self
 
 
 @dataclass
 class TaskData:
-    def __init__(self):
-        pass
-
     id: str
     # type: str
     name: str
-    description: str
+    content: str
     status: str
     creator: str
     # assignee: str
     comments: list
-    parent: Self
-    subtasks: list[Self]
+    parent: str
+    subtasks: list[str]
+
+    def __init__(self, data: dict = None):
+        if data: self.set(data)
+
+    def __iter__(self):
+        return iter(self.__dict__.items())
 
     def __str__(self) -> str:
-        # v = *list(self.__dict__)
-        # str.format()
-
         return str(self.__dict__)
-        # return f"{self.id}, {self.name}, {self.description}, {self.status}, {self.creator}, {self.comments}, {self.parent}"
+
+    def fieldnames(self):
+        return self.__dict__.values()
+
+    def get(self) -> dict:
+        """get variables dictionary"""
+        return self.__dict__
+
+    def set(self, data):
+        """set variables dictionary"""
+        self.__dict__ = data
