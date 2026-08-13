@@ -2,7 +2,7 @@
 
 from taskconverter.constants.common import (
     DEFAULT_AUTHOR,
-    DEFAULT_PROJECT_PREFIX,
+    DEFAULT_IMPORT_KEY_SUFFIX,
     EMPTY_JSON_ARRAY,
     EMPTY_JSON_OBJECT,
     EMPTY_VALUE_MARKERS,
@@ -10,7 +10,7 @@ from taskconverter.constants.common import (
 
 __all__ = [
     'DEFAULT_AUTHOR',
-    'DEFAULT_PROJECT_PREFIX',
+    'DEFAULT_IMPORT_KEY_SUFFIX',
     'EMPTY_JSON_ARRAY',
     'EMPTY_JSON_OBJECT',
     'EMPTY_VALUE_MARKERS',

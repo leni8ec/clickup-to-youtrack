@@ -13,11 +13,6 @@ def main():
     parser.add_argument('input', help='Path to ClickUp CSV export file')
     parser.add_argument('output', help='Path to output YouTrack CSV file')
     parser.add_argument(
-        '--prefix',
-        default='CU',
-        help='YouTrack project prefix (default: CU)'
-    )
-    parser.add_argument(
         '--author',
         default='ClickUp',
         help='Default author for tasks and comments when the author field is empty (default: ClickUp)'
@@ -40,7 +35,7 @@ def main():
     args = parser.parse_args()
 
     # Parse with ID conversion
-    tasks, converter = parse(args.input, args.prefix)
+    tasks, converter = parse(args.input)
 
     if args.dry_run:
         _print_stats(tasks, args, dry_run=True)
@@ -89,7 +84,7 @@ def _print_stats(tasks, args, dry_run):
     print(f'\n{title} Parsed "{args.input}"')
     for label, value in stats:
         print(f'  {label + ":":<{label_width + 2}} {value}')
-    print(f'\n  Prefix: {args.prefix}  |  Author: {args.author}')
+    print(f'\n  Author: {args.author}')
     print(f'  {output_label}: "{args.output}"')
     print(f'\n  {footer}\n')
 

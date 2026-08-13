@@ -3,7 +3,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 
-from taskconverter.constants import youtrack as fields
+from taskconverter.constants import youtrack as fields, DEFAULT_IMPORT_KEY_SUFFIX
 from taskconverter.providers.clickup import parse
 from taskconverter.providers.youtrack import dump
 
@@ -16,7 +16,7 @@ class TestConversionPipeline(unittest.TestCase):
         tasks, converter = parse(str(SAMPLES_DIRECTORY / 'clickup_tasks.csv'))
 
         self.assertEqual(len(tasks), 14)
-        self.assertTrue(all(task.id.startswith('CU-') for task in tasks))
+        self.assertTrue(all(task.id.endswith(DEFAULT_IMPORT_KEY_SUFFIX) for task in tasks))
         self.assertTrue(all(task.original_id for task in tasks))
         self.assertGreater(len(converter.get_mapping()), 0)
 
@@ -43,16 +43,16 @@ class TestConversionPipeline(unittest.TestCase):
             if row[fields.TYPE] == fields.ISSUE
         }
         self.assertEqual(
-            issues_by_clickup_id['demo-001'][fields.CLICKUP_SUBTASKS],
-            'demo-002,demo-003',
+            issues_by_clickup_id['demo001'][fields.CLICKUP_SUBTASKS],
+            'demo002,demo003',
         )
         self.assertEqual(
-            issues_by_clickup_id['demo-002'][fields.CLICKUP_SUBTASKS],
+            issues_by_clickup_id['demo002'][fields.CLICKUP_SUBTASKS],
             '',
         )
         self.assertEqual(
-            issues_by_clickup_id['demo-002'][fields.CLICKUP_PARENT],
-            'demo-001',
+            issues_by_clickup_id['demo002'][fields.CLICKUP_PARENT],
+            'demo001',
         )
 
     def test_multiline_descriptions_are_preserved(self):
