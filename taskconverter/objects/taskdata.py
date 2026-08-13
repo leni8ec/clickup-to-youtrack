@@ -1,35 +1,26 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
 class TaskData:
     id: str
-    # type: str
     name: str
     content: str
     status: str
     creator: str
-    # assignee: str
-    comments: list
+    comments: str
     parent: str
     subtasks: list[str]
-
-    def __init__(self, data: dict = None):
-        if data: self.set(data)
-
-    def __iter__(self):
-        return iter(self.__dict__.items())
-
-    def __str__(self) -> str:
-        return str(self.__dict__)
-
-    def fieldnames(self):
-        return self.__dict__.values()
-
-    def get(self) -> dict:
-        """get variables dictionary"""
-        return self.__dict__
-
-    def set(self, data):
-        """set variables dictionary"""
-        self.__dict__ = data
+    created_date: str = ''
+    due_date: str = ''
+    original_id: str = ''
+    priority: str = ''
+    attachments: str = ''
+    checklists: str = ''
+    tags: list[str] = field(default_factory=list)
+    assignees: str = ''
+    time_estimated: str = ''
+    start_date: str = ''
+    space_name: str = ''
+    folder_name: str = ''
+    list_name: str = ''

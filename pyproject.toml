@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clickup-to-youtrack"
+version = "0.1.0"
+description = "Convert ClickUp CSV exports to YouTrack CSV import format"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+taskconverter = "taskconverter.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["taskconverter*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]

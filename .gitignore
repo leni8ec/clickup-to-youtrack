@@ -4,6 +4,7 @@
 
 # ignore tests dump
 tests/*/*_dump.*
+.junie
 
 ######################
 ##    Generated     ##

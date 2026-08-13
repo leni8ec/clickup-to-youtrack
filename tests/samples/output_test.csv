@@ -1,0 +1,65 @@
+$type$,ID,Summary,Description,State (state),Priority (enum),Estimation (period),Start Date (date),Tags,Assignee (user),Author,Created,Due Date (date),Clickup ID,Clickup Parent (text),Clickup Subtasks (text),Clickup Assignees (text),Space Name (text),Folder Name (text),List Name (text)
+issue,CU-1,Sample task 0001: scenario 2,,Fixed,Normal,30,,,,ClickUp,2024-02-02 09:01,,sample-0001,,,,Sample Space 2,Sample Folder 2,Sample List 2
+issue,CU-2,Sample task 0002: scenario 3,"Validate a translated CSV field with an embedded list.
+
+- Preserve quoted, multiline CSV values
+- Linked source task: CU-3
+- Decision: keep intentional blank values",Fixed,Normal,,2024-03-03 11:02,,,ClickUp,2024-03-03 09:02,2024-03-03 11:02,sample-0002,,,,Sample Space 3,Sample Folder 3,Sample List 3
+issue,CU-3,Sample task 0003: scenario 4,,Open,Normal,,,,,ClickUp,2024-04-04 09:03,,sample-0003,,,,Sample Space 4,Sample Folder 4,Sample List 4
+issue,CU-4,Sample task 0004: scenario 5,,Fixed,Normal,,,,,ClickUp,2024-05-05 09:04,,sample-0004,,,"Test User A, Test User B",Sample Space 5,Sample Folder 5,Sample List 5
+issue,CU-5,Sample task 0005: scenario 6,,In Progress,Normal,,,,,ClickUp,2024-06-06 09:05,,sample-0005,,,Test User A,Sample Space 1,Sample Folder 1,Sample List 1
+issue,CU-6,Sample task 0006: scenario 7,"Investigate why a customer-facing export contains empty date cells.
+
+- Reproduce with CU-7
+- Record the expected fallback behavior
+- Do not infer a due date",Open,Normal,,,"alpha,release",,ClickUp,2024-07-07 09:06,,sample-0006,,,,Sample Space 2,Sample Folder 2,Sample List 2
+issue,CU-7,Sample task 0007: scenario 1,,Open,Normal,,,"alpha,beta",,ClickUp,2024-08-08 09:07,,sample-0007,,,Test User A,Sample Space 3,Sample Folder 3,Sample List 3
+comment,CU-7_c1,"The exported comment keeps both paragraphs.
+
+It also includes a checklist-style note:
+- compare source IDs
+- retain the original author",,,,,,,,test.user2@example.test,2024-09-09 10:08,,,,,,,,
+issue,CU-8,Sample task 0008: scenario 2,"Prepare a hand-off package for the migration dry run.
+
+- Confirm URLs remain intact when quoted
+- Keep reviewer notes as separate comments",Fixed,Normal,,,"alpha,release",,ClickUp,2024-09-09 09:08,,sample-0008,,,"Test User A, Test User B",Sample Space 4,Sample Folder 4,Sample List 4
+comment,CU-8_c1,"UX review: image names look clear.
+
+Please keep the original URLs in the import output.",,,,,,,,test.user2@example.test,2024-10-10 10:09,,,,,,,,
+comment,CU-8_c2,Data check complete: four attachment records were found.,,,,,,,,test.user3@example.test,2024-11-11 10:10,,,,,,,,
+comment,CU-8_c3,Waiting for security review before sharing the package.,,,,,,,,test.user4@example.test,2024-12-12 10:11,,,,,,,,
+comment,CU-8_c4,The migration window is confirmed for the next maintenance slot.,,,,,,,,test.user1@example.test,2024-01-13 10:12,,,,,,,,
+comment,CU-8_c5,No duplicate files were detected in the second export.,,,,,,,,test.user2@example.test,2024-02-14 10:13,,,,,,,,
+comment,CU-8_c6,Closing note: hand-off is ready for the release manager.,,,,,,,,test.user3@example.test,2024-03-15 10:14,,,,,,,,
+comment,CU-8_c7,"**Attachments:**
+
+- [attachment-8-1.png](https://files.example.test/task-8/attachment-1.png)
+- [attachment-8-2.png](https://files.example.test/task-8/attachment-2.png)
+- [attachment-8-3.png](https://files.example.test/task-8/attachment-3.png)
+- [attachment-8-4.png](https://files.example.test/task-8/attachment-4.png)",,,,,,,,ClickUp,,,,,,,,,
+issue,CU-9,Release readiness,"Prepare the release checklist.
+
+Track work in CU-10 and CU-11.",In Progress,High,90,2024-06-03 07:00,"release,platform",,ClickUp,2024-06-01 09:30,2024-06-10 07:00,demo-001,,"demo-002,demo-003","Avery Doe, Morgan Lee",Product,Q2,Release Planning
+comment,CU-9_c1,Dependencies are recorded in the linked tasks.,,,,,,,,avery.doe@example.test,2024-06-01 10:15,,,,,,,,
+comment,CU-9_c2,"**Launch checklist**
+- [x] Confirm scope
+- [ ] Approve rollout",,,,,,,,ClickUp,,,,,,,,,
+comment,CU-9_c3,"**Attachments:**
+
+- [release-plan.pdf](https://files.example.test/releases/plan.pdf)",,,,,,,,ClickUp,,,,,,,,,
+issue,CU-10,Publish release notes,"Draft notes for the public update.
+Use the approved terminology.",Open,Normal,30,2024-06-04 07:00,"documentation,release",,ClickUp,2024-06-02 10:00,2024-06-08 07:00,demo-002,demo-001,,morgan.lee@example.test,Product,Q2,Release Planning
+comment,CU-10_c1,First draft is ready for review.,,,,,,,,morgan.lee@example.test,2024-06-02 13:00,,,,,,,,
+issue,CU-11,Run deployment verification,,In Progress,Urgent,60,2024-06-09 07:00,"release,operations",,ClickUp,2024-06-03 10:00,2024-06-10 07:00,demo-003,demo-001,,Avery Doe,Product,Q2,Release Planning
+comment,CU-11_c1,"**Attachments:**
+
+- verification-log.txt",,,,,,,,ClickUp,,,,,,,,,
+issue,CU-12,Investigate optional integration,,Won't fix,Low,,,,,ClickUp,2024-06-04 10:00,,demo-004,,,,Product,Backlog,Integrations
+issue,CU-13,Import historical records,"This case keeps literal escaped breaks:
+first line
+second line.",Fixed,Normal,120,,"migration,high-volume",,ClickUp,2024-06-05 10:00,2024-06-12 09:00,demo-005,,,"Avery Doe, Morgan Lee",Platform,Operations,Data Migration
+comment,CU-13_c1,"Imported 250 records.
+No validation errors.",,,,,,,,operator@example.test,2024-06-05 15:45,,,,,,,,
+comment,CU-13_c2,"**Checklist:**
+- [x] Archive checks",,,,,,,,ClickUp,,,,,,,,,
+issue,CU-14,Standalone follow-up,,Fixed,Normal,,,,,ClickUp,2024-06-06 10:00,,demo-006,,,,Product,,General
