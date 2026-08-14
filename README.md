@@ -2,6 +2,12 @@
 
 Convert ClickUp Tasks to YouTrack issues with CSV.
 
+## Features
+
+- Set a custom author for issues/comments without an owner.
+- Native parent / subtask linking in YouTrack
+- Dry-run mode.
+
 ## Installation
 
 ```bash
@@ -41,6 +47,8 @@ taskconverter input.csv output.csv --mapping id_mapping.csv
 
 
 ## Field Mapping
+
+> Supports YouTrack links: `parent for`, `subtask of`
 
 | ClickUp                | YouTrack                 | Notes                                                              |
 |------------------------|--------------------------|--------------------------------------------------------------------|

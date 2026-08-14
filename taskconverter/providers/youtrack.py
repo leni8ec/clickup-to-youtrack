@@ -44,6 +44,7 @@ def dump(
         for index, task in enumerate(tasks, start=1):
             _print_progress(index, len(tasks))
             writer.writerow(_issue_row(task, default_author))
+            _write_link_rows(writer, task)
             _write_related_rows(writer, task, default_author)
     print()
 
@@ -71,6 +72,18 @@ def _issue_row(task: TaskData, default_author: str) -> dict[str, str]:
         fields.FOLDER_NAME: task.folder_name,
         fields.LIST_NAME: task.list_name,
     }
+
+
+def _write_link_rows(writer: csv.DictWriter, task: TaskData) -> None:
+    """Write YouTrack link rows immediately after the issue row."""
+    for child_id in task.youtrack_parent_of:
+        row = dict.fromkeys(fields.FIELDNAMES, '')
+        row.update({
+            fields.TYPE: fields.LINK,
+            fields.ID: child_id,
+            fields.SUMMARY: fields.PARENT_FOR,
+        })
+        writer.writerow(row)
 
 
 def _write_related_rows(

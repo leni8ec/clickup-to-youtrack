@@ -11,6 +11,8 @@ class TaskData:
     comments: str
     parent: str
     subtasks: list[str]
+    youtrack_parent_of: list[str] = field(default_factory=list)
+    youtrack_subtask_of: str = ''
     created_date: str = ''
     due_date: str = ''
     original_id: str = ''

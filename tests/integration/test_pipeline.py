@@ -29,14 +29,18 @@ class TestConversionPipeline(unittest.TestCase):
         with (SAMPLES_DIRECTORY / 'output_test.csv').open(encoding='utf-8', newline='') as fixture_file:
             expected_rows = list(csv.DictReader(fixture_file))
 
-        self.assertEqual(actual_rows, expected_rows)
+        expected_fieldnames = expected_rows[0].keys()
+        actual_content_rows = [row for row in actual_rows if row[fields.TYPE] != fields.LINK]
+        self.assertEqual(
+            [{field: row[field] for field in expected_fieldnames} for row in actual_content_rows],
+            expected_rows,
+        )
         self.assertTrue(all(fields.TYPE in row for row in actual_rows))
         self.assertNotIn('Comment', actual_rows[0])
         self.assertIn(fields.CLICKUP_PARENT, actual_rows[0])
         self.assertIn(fields.CLICKUP_SUBTASKS, actual_rows[0])
-        self.assertFalse(
-            any('subtask of' in field.lower() for field in actual_rows[0]),
-        )
+        self.assertNotIn('YouTrack Parent of', actual_rows[0])
+        self.assertNotIn('YouTrack Subtask of', actual_rows[0])
         issues_by_clickup_id = {
             row[fields.CLICKUP_ID]: row
             for row in actual_rows
@@ -54,6 +58,16 @@ class TestConversionPipeline(unittest.TestCase):
             issues_by_clickup_id['demo002'][fields.CLICKUP_PARENT],
             'demo001',
         )
+        parent_index = next(
+            index for index, row in enumerate(actual_rows)
+            if row[fields.TYPE] == fields.ISSUE
+            and row[fields.CLICKUP_ID] == 'demo001'
+        )
+        self.assertEqual(actual_rows[parent_index + 1][fields.TYPE], fields.LINK)
+        self.assertEqual(actual_rows[parent_index + 1][fields.ID], 'demo002-0')
+        self.assertEqual(actual_rows[parent_index + 1][fields.SUMMARY], fields.PARENT_FOR)
+        self.assertEqual(actual_rows[parent_index + 2][fields.ID], 'demo003-0')
+        self.assertEqual(actual_rows[parent_index + 2][fields.SUMMARY], fields.PARENT_FOR)
 
     def test_multiline_descriptions_are_preserved(self):
         tasks, _ = parse(str(SAMPLES_DIRECTORY / 'clickup_tasks.csv'))

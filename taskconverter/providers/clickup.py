@@ -44,11 +44,14 @@ def parse(
 
 
 def _populate_subtasks(tasks: list[TaskData]) -> None:
-    """Record each task's direct children using their original ClickUp IDs."""
+    """Record ClickUp display data and YouTrack links for direct children."""
     tasks_by_original_id = {task.original_id: task for task in tasks}
     for task in tasks:
-        if task.parent in tasks_by_original_id:
-            tasks_by_original_id[task.parent].subtasks.append(task.original_id)
+        parent = tasks_by_original_id.get(task.parent)
+        if parent:
+            parent.subtasks.append(task.original_id)
+            parent.youtrack_parent_of.append(task.id)
+            task.youtrack_subtask_of = parent.id
 
 
 def _parse_task(row: dict[str, str], converter: ImportKeyMapper) -> TaskData | None:
