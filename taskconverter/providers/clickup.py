@@ -3,6 +3,7 @@
 import csv
 import io
 import json
+import re
 
 from taskconverter.constants import clickup as fields
 from taskconverter.objects.taskdata import TaskData
@@ -40,6 +41,8 @@ def parse(
                 comment['text'] = normalize_multiline_text(str(text))
         task.comments = json.dumps(comments)
 
+    _populate_related_tasks(tasks)
+
     return tasks, import_key_mapper
 
 
@@ -52,6 +55,29 @@ def _populate_subtasks(tasks: list[TaskData]) -> None:
             parent.subtasks.append(task.original_id)
             parent.youtrack_parent_of.append(task.id)
             task.youtrack_subtask_of = parent.id
+
+
+def _populate_related_tasks(tasks: list[TaskData]) -> None:
+    """Find references to imported ClickUp tasks in task text."""
+    tasks_by_original_id = {task.original_id: task for task in tasks}
+    if not tasks_by_original_id:
+        return
+    ids = sorted(tasks_by_original_id, key=len, reverse=True)
+    pattern = re.compile(
+        rf'(?<![A-Za-z0-9])(?:{"|".join(re.escape(task_id) for task_id in ids)})(?![A-Za-z0-9])',
+    )
+    for task in tasks:
+        comments = parse_comments(task.comments)
+        text = '\n'.join([
+            task.name,
+            task.content,
+            *(str(comment.get('text', '')) for comment in comments),
+        ])
+        task.youtrack_relates_to = list(dict.fromkeys(
+            tasks_by_original_id[match.group()].id
+            for match in pattern.finditer(text)
+            if match.group() != task.original_id
+        ))
 
 
 def _parse_task(row: dict[str, str], converter: ImportKeyMapper) -> TaskData | None:

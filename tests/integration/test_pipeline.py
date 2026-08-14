@@ -4,7 +4,9 @@ from tempfile import TemporaryDirectory
 import unittest
 
 from taskconverter.constants import youtrack as fields, DEFAULT_IMPORT_KEY_SUFFIX
+from taskconverter.objects.taskdata import TaskData
 from taskconverter.providers.clickup import parse
+from taskconverter.providers.clickup import _populate_related_tasks
 from taskconverter.providers.youtrack import dump
 
 
@@ -73,3 +75,28 @@ class TestConversionPipeline(unittest.TestCase):
         tasks, _ = parse(str(SAMPLES_DIRECTORY / 'clickup_tasks.csv'))
         descriptions = [task.content for task in tasks if task.content]
         self.assertTrue(any('\n' in description for description in descriptions))
+
+    def test_clickup_ids_in_text_create_related_links(self):
+        tasks = [
+            TaskData('one-0', 'One', 'See two and two again; unknown is ignored.', 'open', '', '[]', '', []),
+            TaskData('two-0', 'Two', '', 'open', '', '[{"text": "See one"}]', '', []),
+        ]
+        tasks[0].original_id = 'one'
+        tasks[1].original_id = 'two'
+
+        _populate_related_tasks(tasks)
+
+        self.assertEqual(tasks[0].youtrack_relates_to, ['two-0'])
+        self.assertEqual(tasks[1].youtrack_relates_to, ['one-0'])
+
+        with TemporaryDirectory() as temporary_directory:
+            output_path = Path(temporary_directory) / 'youtrack.csv'
+            dump(tasks, str(output_path))
+            with output_path.open(encoding='utf-8', newline='') as output_file:
+                rows = list(csv.DictReader(output_file))
+
+        links = [row for row in rows if row[fields.TYPE] == fields.LINK]
+        self.assertEqual([(row[fields.ID], row[fields.SUMMARY]) for row in links], [
+            ('two-0', fields.RELATES_TO),
+            ('one-0', fields.RELATES_TO),
+        ])

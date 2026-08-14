@@ -3,6 +3,7 @@
 ISSUE = 'issue'
 COMMENT = 'comment'
 LINK = 'link'
+RELATES_TO = 'relates to'
 PARENT_FOR = 'parent for'
 SUBTASK_OF = 'subtask of'  # unused
 

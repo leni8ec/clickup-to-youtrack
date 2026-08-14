@@ -44,8 +44,9 @@ def dump(
         for index, task in enumerate(tasks, start=1):
             _print_progress(index, len(tasks))
             writer.writerow(_issue_row(task, default_author))
-            _write_link_rows(writer, task)
-            _write_related_rows(writer, task, default_author)
+            _write_parent_link_rows(writer, task)
+            _write_related_link_rows(writer, task)
+            _write_related_comments_and_attachments_rows(writer, task, default_author)
     print()
 
 
@@ -74,7 +75,7 @@ def _issue_row(task: TaskData, default_author: str) -> dict[str, str]:
     }
 
 
-def _write_link_rows(writer: csv.DictWriter, task: TaskData) -> None:
+def _write_parent_link_rows(writer: csv.DictWriter, task: TaskData) -> None:
     """Write YouTrack link rows immediately after the issue row."""
     for child_id in task.youtrack_parent_of:
         row = dict.fromkeys(fields.FIELDNAMES, '')
@@ -86,11 +87,24 @@ def _write_link_rows(writer: csv.DictWriter, task: TaskData) -> None:
         writer.writerow(row)
 
 
-def _write_related_rows(
+def _write_related_link_rows(writer: csv.DictWriter, task: TaskData) -> None:
+    """Write link rows for ClickUp IDs mentioned in task text."""
+    for related_id in task.youtrack_relates_to:
+        row = dict.fromkeys(fields.FIELDNAMES, '')
+        row.update({
+            fields.TYPE: fields.LINK,
+            fields.ID: related_id,
+            fields.SUMMARY: fields.RELATES_TO,
+        })
+        writer.writerow(row)
+
+
+def _write_related_comments_and_attachments_rows(
     writer: csv.DictWriter,
     task: TaskData,
     default_author: str,
 ) -> None:
+    # comments
     comments = parse_comments(task.comments)
     for index, comment in enumerate(comments, start=1):
         writer.writerow(_comment_row(
@@ -100,6 +114,7 @@ def _write_related_rows(
             parse_date(str(comment.get('date', ''))),
         ))
 
+    # attachments
     extra_index = len(comments) + 1
     for text in (format_checklists(task.checklists), format_attachments(task.attachments)):
         if text:

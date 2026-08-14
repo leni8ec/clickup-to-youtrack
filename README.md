@@ -5,7 +5,7 @@ Convert ClickUp Tasks to YouTrack issues with CSV.
 ## Features
 
 - Set a custom author for issues/comments without an owner.
-- Native parent / subtask linking in YouTrack
+- YouTrack link references: `parent for`, `subtask of`, `relates to`
 - Dry-run mode.
 
 ## Installation
@@ -45,10 +45,13 @@ taskconverter input.csv output.csv --mapping id_mapping.csv
 5. Bind a Google sheet to a target project in YouTrack
 6. Run
 
+## Notes
+
+- References to another task's `ClickUp ID` in the task name, description, or
+comment text create a `relates to` linking. Only IDs belonging
+to tasks in the current import are linked; repeated mentions are deduplicated.
 
 ## Field Mapping
-
-> Supports YouTrack links: `parent for`, `subtask of`
 
 | ClickUp                | YouTrack                 | Notes                                                              |
 |------------------------|--------------------------|--------------------------------------------------------------------|
